@@ -1,0 +1,16 @@
+tags+: 13.2
+13.2.arch: amd64
+13.2.name: "mailpit"
+13.2.timestamp.amd64: 1703431187
+13.2.sum.amd64: bd1ce5abd8c18fdf08437c5c6117782417364ef2ecae25aff77b3952ce04bbe2
+13.2.size.amd64: 35598344
+13.2.source.amd64: "http://appjail.hpc.at/mailpit/13.2-amd64-image.appjail"
+13.2.source.amd64+: "https://images.all101bsd.download/mailpit/13.2-amd64-image.appjail"
+tags+: 14.0
+14.0.arch: amd64
+14.0.name: "mailpit"
+14.0.timestamp.amd64: 1703431290
+14.0.sum.amd64: b737d84b2f3dac9b63f25020679e74a56f9ae65c04e557e08cd51aa889211c4b
+14.0.size.amd64: 35659345
+14.0.source.amd64: "http://appjail.hpc.at/mailpit/14.0-amd64-image.appjail"
+14.0.source.amd64+: "https://images.all101bsd.download/mailpit/14.0-amd64-image.appjail"
