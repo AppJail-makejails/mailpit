@@ -31,7 +31,7 @@ easily handling tens of thousands of emails
 * Configurable automatic email pruning (default keeps the most recent 500 emails)
 * A simple [REST API](https://mailpit.axllent.org/docs/api-v1/) for integration testing
 * Optional [webhook](https://mailpit.axllent.org/docs/integration/webhook/) for received messages
-* Multi-architecture [Docker images](https://mailpit.axllent.org/docs/install/docker/) & [AppJail](https://github.com/AppJail-makejails/mailpit)
+* Multi-architecture [Docker images](https://mailpit.axllent.org/docs/install/docker/) & [AppJail Makejails](https://github.com/AppJail-makejails/mailpit)
 
 ## How to use this Makejail
 
