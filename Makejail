@@ -1,0 +1,32 @@
+INCLUDE options/options.makejail
+
+ARG mailpit_tag=13.2
+
+FROM --entrypoint gh+AppJail-makejails/mailpit mailpit:${mailpit_tag}
+
+STOP
+
+STAGE start
+
+USER mailpit
+WORKDIR /mailpit
+
+RUN daemon \
+        -r \
+        -t "Multi-platform email testing tool & API for developers" \
+        -P /mailpit/.master.pid \
+        -p /mailpit/.pid \
+        -o /mailpit/mailpit.log \
+            /usr/local/bin/mailpit
+
+STAGE custom:mailpit_status
+
+CMD if [ -f "/mailpit/.pid" ]; then \
+        top -ap `head -1 /mailpit/.pid`; \
+    fi
+
+STAGE custom:mailpit_log
+
+CMD if [ -f "/mailpit/mailpit.log" ]; then \
+        less -R /mailpit/mailpit.log; \
+    fi
