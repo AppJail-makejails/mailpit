@@ -85,7 +85,7 @@ Deploy Mailpit anywhere using `appjail-director up`.
 
 ### Check current status
 
-The custom stage `mailpit_status` can be used to run `top(1)` to check the status of MeTube.
+The custom stage `mailpit_status` can be used to run `top(1)` to check the status of Mailprit.
 
 ```sh
 appjail run -s mailpit_status mailpit
