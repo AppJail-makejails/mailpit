@@ -81,7 +81,7 @@ Deploy Mailpit anywhere using `appjail-director up`.
 
 ### Arguments (stage: build):
 
-* `mailpit_tag` (default: `13.2`): see [#tags](#tags).
+* `mailpit_tag` (default: `13.3`): see [#tags](#tags).
 
 ### Check current status
 
@@ -103,5 +103,5 @@ appjail run -s mailpit_log mailpit
 
 | Tag    | Arch     | Version        | Type   |
 | ------ | -------- | -------------- | ------ |
-| `13.2` | `amd64`  | `13.2-RELEASE` | `thin` |
+| `13.3` | `amd64`  | `13.3-RELEASE` | `thin` |
 | `14.0` | `amd64`  | `14.0-RELEASE` | `thin` |
