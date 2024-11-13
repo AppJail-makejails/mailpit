@@ -12,9 +12,7 @@ USER mailpit
 WORKDIR /mailpit
 
 RUN daemon \
-        -r \
         -t "Multi-platform email testing tool & API for developers" \
-        -P /mailpit/.master.pid \
         -p /mailpit/.pid \
         -o /mailpit/mailpit.log \
             /usr/local/bin/mailpit
