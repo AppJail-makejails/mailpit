@@ -1,6 +1,6 @@
 INCLUDE options/options.makejail
 
-ARG mailpit_tag=13.4
+ARG mailpit_tag=13.5
 ARG mailpit_ajspec=gh+AppJail-makejails/mailpit
 
 FROM --entrypoint "${mailpit_ajspec}" mailpit:${mailpit_tag}
