@@ -1,16 +1,17 @@
 tags+: 13.5
 13.5.arch: amd64
 13.5.name: "mailpit"
-13.5.timestamp.amd64: 1758839888
-13.5.sum.amd64: ec8cfd815c412ea6c4fb9035d65aad81a68389c684782f5b304e77d4b271fb9a
-13.5.size.amd64: 40804135
+13.5.timestamp.amd64: 1760652016
+13.5.sum.amd64: f14059ef0c3c247eee313ac06a87b9e444e28e91993c1e2b6856376df893c110
+13.5.size.amd64: 40719120
 13.5.source.amd64: "https://images.all101bsd.download/mailpit/13.5-amd64-image.appjail"
 13.5.source.amd64+: "http://appjail.hpc.at/mailpit/13.5-amd64-image.appjail"
 tags+: 14.3
 14.3.arch: amd64
 14.3.name: "mailpit"
-14.3.timestamp.amd64: 1758839995
-14.3.sum.amd64: 82127b3139f0b422b0d1735285f4545b0eb6bf79807be665566d45fc27f09385
-14.3.size.amd64: 40466453
+14.3.timestamp.amd64: 1760652109
+14.3.sum.amd64: 61c377a28f2bb527ee20661b6afdfd5e86f1883aee1bcfee74c5effd4f2c5d96
+14.3.size.amd64: 40541226
 14.3.source.amd64: "https://images.all101bsd.download/mailpit/14.3-amd64-image.appjail"
 14.3.source.amd64+: "http://appjail.hpc.at/mailpit/14.3-amd64-image.appjail"
+maintenance: "This image is uploading, please wait a moment and try again. If you are importing this image using a Makejail that has the '--<name>_ajspec' argument, you can use the 'reproduce' method to use 'appjail-reproduce'. See 'appjail-image(5)' for details."
