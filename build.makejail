@@ -1,7 +1,0 @@
-INCLUDE options/options.makejail
-
-PKG mailpit
-
-CMD pw useradd -n mailpit -d /mailpit
-CMD mkdir /mailpit
-CMD chown mailpit:mailpit /mailpit

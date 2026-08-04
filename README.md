@@ -1,54 +1,51 @@
 # Mailpit
 
-Mailpit is a small, fast, low memory, zero-dependency, multi-platform email testing tool & API for developers.
+Mailpit is a multi-platform email testing tool & API for developers.
 
-It acts as an SMTP server, provides a modern web interface to view & test captured emails, and contains an API for automated integration testing.
+It acts as both an SMTP server, and provides a web interface to view all captured emails.
 
 mailpit.axllent.org
 
-<img src="https://imgur.com/WWmFsI0.png" width="80%" height="auto">
-
-## Features
-
-* Runs entirely from a single [static binary](https://mailpit.axllent.org/docs/install/)
-* Modern web UI to view emails (formatted HTML, highlighted HTML source, text, headers, raw source, and MIME attachments
-including image thumbnails), including optional [HTTPS](https://mailpit.axllent.org/docs/configuration/https/)
-* Optional [basic authentication](https://mailpit.axllent.org/docs/configuration/frontend-authentication/) for web UI & API
-* [HTML check](https://mailpit.axllent.org/docs/usage/html-check/) to test & score mail client compatibility with HTML emails
-* [Link check](https://mailpit.axllent.org/docs/usage/link-check/) to test message links (HTML & text) & linked images
-* [Create screenshots](https://mailpit.axllent.org/docs/usage/html-screenshots/) of HTML messages via web UI
-* Mobile and tablet HTML preview toggle in desktop mode
-* Advanced [mail search](https://mailpit.axllent.org/docs/usage/search-filters/)
-* [Message tagging](https://mailpit.axllent.org/docs/usage/tagging/)
-* Real-time web UI updates using web sockets for new mail & optional browser notifications for new mail (when accessed
-via either HTTPS or `localhost` only)
-* SMTP server with optional [STARTTLS & SMTP authentication](https://mailpit.axllent.org/docs/configuration/smtp-authentication/) (including an
-"accept any" mode)
-* [SMTP relaying](https://mailpit.axllent.org/docs/configuration/smtp-relay/) (message release) - relay messages via a different SMTP server
-including an optional allowlist of accepted recipients
-* Fast SMTP processing & storing - approximately 70-100 emails per second depending on CPU, network speed & email size,
-easily handling tens of thousands of emails
-* Configurable automatic email pruning (default keeps the most recent 500 emails)
-* A simple [REST API](https://mailpit.axllent.org/docs/api-v1/) for integration testing
-* Optional [webhook](https://mailpit.axllent.org/docs/integration/webhook/) for received messages
-* Multi-architecture [Docker images](https://mailpit.axllent.org/docs/install/docker/) & [AppJail Makejails](https://github.com/AppJail-makejails/mailpit)
+<img src="https://camo.githubusercontent.com/5c194f92f50b12496a8836090aba2dbcff5379937606f4fa220490610c4a8d14/68747470733a2f2f696d6775722e636f6d2f57576d467349302e706e67" width="30%" height="auto" alt="Mailpit logo">
 
 ## How to use this Makejail
 
-## Standalone
+### Standalone
 
-```sh
-appjail makejail \
-    -j mailpit \
-    -f gh+AppJail-makejails/mailpit \
-    -o expose=8025 \
-    -o expose=1025
-appjail start mailpit
+A basic example of running Mailpit within AppJail:
+
+```console
+$ appjail oci run -Pd \
+    -o overwrite=force \
+    -o virtualnet=":<random> default" \
+    -o nat \
+    -o expose=8025:8025 \
+    -o expose=1025:1025 \
+    ghcr.io/appjail-makejails/mailpit mailpit
 ```
 
-## Deploy using appjail-director
+You need to ensure you map the correct ports (default Web UI on 8025 and SMTP on 1025).
 
-**appjail-director.yml**:
+### Setting Mailpit options
+
+View all [runtime options](https://mailpit.axllent.org/docs/configuration/runtime-options/) (flags & environment variables). Environment variables can be set using the `-e` flag when starting your container, for instance:
+
+```console
+$ mkdir -p /var/appjail-volumes/mailpit/data
+$ appjail oci run -Pd \
+    -o overwrite=force \
+    -o virtualnet=":<random> default" \
+    -o nat \
+    -o fstab="/var/appjail-volumes/mailpit/data /data" \
+    -e MP_DATABASE="/data/mailpit.db" \
+    -e MP_UI_AUTH_FILE="/data/authfile" \
+    -e TZ=America/Caracas \
+    ghcr.io/appjail-makejails/mailpit mailpit
+```
+
+### AppJail Director example
+
+The following example exposes both the web UI port (8025) and SMTP port (1025) to external hosts. If your `appjail-director.yml` is running multi-container applications and does not require (for instance) 1025 to be open to the host, then you can omit - `expose: '1025:1025'` which will then only expose it to the other containers.
 
 ```yaml
 options:
@@ -57,52 +54,52 @@ options:
 
 services:
   mailpit:
-    makejail: gh+AppJail-makejails/mailpit
     name: mailpit
-    options:
-      - expose: 1025
-      - expose: 8025
-    start-environment:
-      - MP_MAX_MESSAGES: 5000
-      - MP_DATA_FILE: /mailpit/db/mailpit.db
-      - MP_SMTP_AUTH_ACCEPT_ANY: 1
-      - MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    makejail: gh+AppJail-makejails/mailpit
     volumes:
-      - mailpit-db: /mailpit/db
+      - data: /data
+    options:
+      - expose: '8025:8025'
+      - expose: '1025:1025'
+    oci:
+      environment:
+        - MP_MAX_MESSAGES: 5000
+        - MP_DATABASE: /data/mailpit.db
+        - MP_SMTP_AUTH_ACCEPT_ANY: 1
+        - MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
 volumes:
-  mailpit-db:
-    device: .volumes/db
-    owner: 1001
-    group: 1001
+  data:
+    device: /var/appjail-volumes/mailpit/data
 ```
 
-Deploy Mailpit anywhere using `appjail-director up`.
+### Arguments (stage: build)
 
-### Arguments (stage: build):
+* `mailpit_from` (default: `ghcr.io/appjail-makejails/mailpit`): Location of OCI image. See also [OCI Configuration](#oci-configuration).
+* `mailpit_tag` (default: `latest`): OCI image tag. See also [OCI Configuration](#oci-configuration).
 
-* `mailpit_tag` (default: `14.3`): see [#tags](#tags).
-* `mailpit_ajspec` (default: `gh+AppJail-makejails/mailpit`): Entry point where the `appjail-ajspec(5)` file is located.
+### Environment (OCI image)
 
-### Check current status
+* `PGID` (default: `1000`): Equivalent to `PUID` but for the Process Group ID.
+* `PUID` (default: `1000`): Process User ID for the container's main process, allowing you to match the owner of files written to mounted host volumes to your host system's user. Writable volumes are changed based on this environment variable.
 
-The custom stage `mailpit_status` can be used to run `top(1)` to check the status of Mailprit.
+### Volumes
 
-```sh
-appjail run -s mailpit_status mailpit
+| Name | Owner | Group | Perm | Type | Mountpoint |
+| --- | --- | --- | --- | --- | --- |
+| appjail-263aca83a3-data | `${PUID}` | `${PGID}` | - | - | /data |
+
+## OCI Configuration
+
+```yaml
+build:
+  variants:
+    - tag: 15.1
+      containerfile: Containerfile
+      aliases: ["latest"]
+      default: true
+      args:
+        FREEBSD_RELEASE: "15.1"
+        NO_PKGCLEAN: "1"
+      cache_dirs: ["pkgcache0:/var/cache/pkg"]
 ```
-
-### Log
-
-To view the log generated by the web application, run the custom stage `mailpit_log`.
-
-```sh
-appjail run -s mailpit_log mailpit
-```
-
-## Tags
-
-| Tag    | Arch     | Version        | Type   |
-| ------ | -------- | -------------- | ------ |
-| `14.3` | `amd64`  | `14.3-RELEASE` | `thin` |
-| `15` | `amd64`  | `15` | `thin` |
