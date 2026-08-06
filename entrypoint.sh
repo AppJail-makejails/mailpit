@@ -6,6 +6,6 @@ set -e
 
 create_user
 
-chown -R noroot:noroot /data
+change_owner /data
 
 exec su-exec noroot mailpit "$@"
