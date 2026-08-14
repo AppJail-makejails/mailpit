@@ -14,7 +14,7 @@ LABEL org.opencontainers.image.title="Mailpit" \
 RUN set -xe; \
     \
     pkg update; \
-    pkg install -U mailpit; \
+    pkg install mailpit; \
     \
     if [ -z "${NO_PKGCLEAN}" ]; then \
         pkg clean -a; \
